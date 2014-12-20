@@ -46,8 +46,9 @@
     <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\packages\RavenDB.Client.3.0.3528\lib\net45\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
-    <Reference Include="ShopifyAPIAdapterLibrary">
-      <HintPath>..\..\shopify.net-master\shopify.net-master\Source\DotNet4.5\ShopifyAPIAdapterLibrary\bin\Debug\ShopifyAPIAdapterLibrary.dll</HintPath>
+    <Reference Include="ShopifyAPIAdapterLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ShopifyAPI.1.0.0\lib\net40\ShopifyAPIAdapterLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
