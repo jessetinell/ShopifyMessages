@@ -1,0 +1,29 @@
+﻿<style>
+    #appen-message-content {
+        background-repeat: no-repeat;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+    }
+
+        #appen-message-content .note {
+            font-size: 13px;
+            color: red;
+        }
+</style>
+<div id="appen-message-content" style="background-image:url({{image-body}})" data-image="image-body">
+    {{editor-text}}
+
+    <form>
+        <h1>Anmäl dig här</h1>
+        <div id="appen-form-fields">
+            <input type="email" placeholder="Din epost" />
+            <input type="submit" value="Skicka" />
+            <p class="note">Vi sparar inte info</p>
+        </div>
+        <div id="appen-form-ty" style="display:none;">
+            {{editor-ty}}
+        </div>
+    </form>
+</div>
+<script async src="http://localhost:1986/base.js"></script>

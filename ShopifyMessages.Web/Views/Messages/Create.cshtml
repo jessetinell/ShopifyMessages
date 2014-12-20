@@ -1,0 +1,11 @@
+﻿@model ShopifyMessages.Web.ViewModels.CreateViewModel
+
+<h1>Choose a template</h1>
+@foreach (var template in Model.Templates)
+{
+    <div class="template">
+        <a href="@Url.Action("Edit")?id=@template.Id">
+            <img src="@template.PreviewImageUrl" alt="" width="150" />
+        </a>
+    </div>
+}

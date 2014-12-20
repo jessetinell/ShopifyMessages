@@ -1,0 +1,14 @@
+﻿{
+    "PlaceholderValues": [
+        {
+            "Id": "editor-text",
+            "Content": "<h1>Tja<br></h1>"
+        },
+        {
+            "Id": "image-body",
+            "Content": "http://www.formula1.com/wi/gi/597x478/9MsC/sutton/2013/dch1326may643.jpg"
+        }
+    ],
+    "Height": 500,
+    "Width": 300
+}

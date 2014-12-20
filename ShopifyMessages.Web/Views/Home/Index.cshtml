@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@if (ViewBag.IsAuthenticated)
+{
+    Html.RenderAction("Index", "Messages");
+}
+else
+{
+    <h1>Du måste logga in</h1>
+}

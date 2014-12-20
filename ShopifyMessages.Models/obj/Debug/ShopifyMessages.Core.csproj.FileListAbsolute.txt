@@ -1,0 +1,7 @@
+C:\Users\Jesse\Desktop\ShopifyMessages\ShopifyMessages.Models\bin\Debug\ShopifyMessages.Core.dll
+C:\Users\Jesse\Desktop\ShopifyMessages\ShopifyMessages.Models\bin\Debug\ShopifyMessages.Core.pdb
+C:\Users\Jesse\Desktop\ShopifyMessages\ShopifyMessages.Models\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Jesse\Desktop\ShopifyMessages\ShopifyMessages.Models\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Jesse\Desktop\ShopifyMessages\ShopifyMessages.Models\obj\Debug\ShopifyMessages.Core.csprojResolveAssemblyReference.cache
+C:\Users\Jesse\Desktop\ShopifyMessages\ShopifyMessages.Models\obj\Debug\ShopifyMessages.Core.dll
+C:\Users\Jesse\Desktop\ShopifyMessages\ShopifyMessages.Models\obj\Debug\ShopifyMessages.Core.pdb

@@ -1,0 +1,25 @@
+﻿@model ShopifyMessages.Web.ViewModels.LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm((string)ViewBag.FormAction, "Account"))
+{
+    @Html.ValidationSummary(true, "Log in was unsuccessful")
+
+    <fieldset>
+        <legend>Log in Form</legend>
+        @Html.LabelFor(m => m.ShopName)
+        @Html.TextBoxFor(m => m.ShopName)
+        @Html.ValidationMessageFor(m => m.ShopName)
+        @Html.AntiForgeryToken()
+        <input type="submit" value="Log in" />
+    </fieldset>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,14 @@
+﻿{
+    "PlaceholderValues": [
+        {
+            "Id": "editor-text",
+            "Content": "<h1>Tja<br></h1>"
+        },
+        {
+            "Id": "image-body",
+            "Content": "http://media-cdn.tripadvisor.com/media/photo-s/03/46/f1/30/dive-charter-curacao.jpg"
+        }
+    ],
+    "Height": 500,
+    "Width": 300
+}

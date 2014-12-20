@@ -1,0 +1,48 @@
+﻿@model ShopifyMessages.Web.ViewModels.EditViewModel
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+<div id="appen-message-wrapper">
+    <div id="template-preview" data-template="@Model.TemplateIdentifier" style="width:@(Model.Message.Width)px;height:@(Model.Message.Height)px;">
+        @Model.EditableTemplate
+    </div>
+</div>
+
+@using (Html.BeginForm("Edit", "Messages", FormMethod.Post))
+{
+    @Html.TextBoxFor(m => m.Message.Name)
+    @Html.CheckBoxFor(m => m.Message.IsLive)
+
+
+    for (int i = 0; i < Model.Message.PlaceholderValues.Count; i++)
+    {
+        var placeholder = Model.Message.PlaceholderValues[i];
+        @Html.HiddenFor(p => p.Message.PlaceholderValues[i].Content, new { id = "hidden-" + placeholder.Id })
+        @Html.HiddenFor(p => p.Message.PlaceholderValues[i].Id)
+    }
+
+    @Html.HiddenFor(e => e.Id)
+    @Html.HiddenFor(t => t.Message.TemplateId)
+    @Html.HiddenFor(m => m.Message.Id)
+    @Html.HiddenFor(m => m.Message.Height)
+    @Html.HiddenFor(m => m.Message.Width)
+
+    @Html.AntiForgeryToken()
+    <input type="submit" value="Spara" class="btn btn-danger pull-right" />
+}
+
+<script src="~/Scripts/tinymce/tinymce.min.js"></script>
+<script>
+
+</script>
+<script>
+    var Page = 'publish';
+</script> 
+<style>
+    #template-preview{
+        border:1px solid #FCA4A4;
+        overflow: hidden;
+        margin: 25px auto;
+        font-family: 'Open Sans', sans-serif;
+    }
+</style>

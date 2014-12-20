@@ -1,0 +1,18 @@
+﻿@model ShopifyMessages.Web.ViewModels.MessagesViewModel
+
+@if (ViewBag.ShopName == "jesse-9")
+{
+    @Html.ActionLink("Synka nya mallar", "SyncNewTemplates")
+}
+
+<h1>My messages</h1>
+@foreach (var message in Model.MyMessages)
+{
+    <div class="template">
+        <a href="@Url.Action("Edit")?id=@message.Id">
+            <h4>@message.Name</h4>
+            <p>Live: @message.IsLive</p>
+            @*<img src="@message." alt="" width="150" />*@
+        </a>
+    </div>
+}
