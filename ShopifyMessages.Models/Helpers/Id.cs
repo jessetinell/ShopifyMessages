@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShopifyMessages.Core.Helpers
+﻿namespace ShopifyMessages.Core.Helpers
 {
     public class Id
     {
@@ -13,6 +7,11 @@ namespace ShopifyMessages.Core.Helpers
         {
             // Messages/affär
             return string.Format("message/{0}/", shop);
+        }
+
+        public static string Shop(string shopName)
+        {
+            return string.Format("shop/{0}", shopName);
         }
 
         public static string Template(string id)

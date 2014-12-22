@@ -180,7 +180,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\FormController.cs" />
     <Compile Include="Controllers\RavenDbController.cs" />
     <Compile Include="Controllers\ShopifyController.cs" />
@@ -199,7 +198,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="base.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Messages.js" />

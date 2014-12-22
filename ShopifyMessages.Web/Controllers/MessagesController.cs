@@ -27,10 +27,13 @@ namespace ShopifyMessages.Web.Controllers
             var messagesId = Id.Messages(ShopName);
             var messages = RavenSession.Advanced.LoadStartingWith<Message>(messagesId);
 
+            if (!messages.Any())
+                Response.Redirect(Url.Action("Create", new { first = true }));
+
             return PartialView("_Index", new MessagesViewModel { MyMessages = messages.ToList() });
         }
 
-        public ActionResult Create()
+        public ActionResult Create(bool first = false)
         {
             //ViewBag.ScriptTags = ShopifyApi.Get("/admin/script_tags.json");
 
@@ -38,6 +41,7 @@ namespace ShopifyMessages.Web.Controllers
 
             var viewModel = new CreateViewModel
             {
+                First = first,
                 Templates = TemplateHelper.CreateTemplateViewModel(templates)
             };
 
@@ -47,41 +51,41 @@ namespace ShopifyMessages.Web.Controllers
         public ActionResult Edit(string id)
         {
             var templateIdentifier = "";
-            var placeholderValues = new List<PlaceholderValue>();
             var message = new Message();
+            Template template;
 
             if (id.StartsWith(Id.TemplatePrefix))
             {
                 // Create new message
                 templateIdentifier = Id.TemplateIdentifier(id);
-                var template = RavenSession.Load<Template>(id);
-                placeholderValues = template.PlaceholderValues;
-                message.Width = template.Width;
-                message.Height = template.Height;
+                template = RavenSession.Load<Template>(id);
+                message.PlaceholderValues = template.PlaceholderValues;
+                message.MaxWidth = template.MaxWidth;
+                message.MinHeight = template.MinHeight;
                 message.PlaceholderValues = template.PlaceholderValues;
                 message.TemplateId = id;
+                message.FormSettings = new FormSettings();
+                message.Position = new Position();
+                message.DisplayRules = new DisplayRules();
             }
             else
             {
                 // Edit existing message
                 var myMessage = RavenSession.Load<Message>(id);
-                if (myMessage != null)
-                {
-                    placeholderValues = myMessage.PlaceholderValues;
-                    message = myMessage;
-                    templateIdentifier = Id.TemplateIdentifier(myMessage.TemplateId);
-                }
+
+                message = myMessage;
+                templateIdentifier = Id.TemplateIdentifier(myMessage.TemplateId);
+
+                template = RavenSession.Load<Template>(myMessage.TemplateId);
             }
-
-
-            var rawTemplate = Helper.FileAsString(string.Format("/MessageTemplates/{0}/template.html", templateIdentifier));
 
             var viewModel = new EditViewModel
             {
                 Id = id,
                 TemplateIdentifier = templateIdentifier,
                 Message = message,
-                EditableTemplate = Helper.CompileEditableTemplate(rawTemplate, placeholderValues)
+                Template = template,
+                EditableTemplate = TemplateParser.ParseEditableTemplate(template.Html, message)
             };
 
             return View(viewModel);
@@ -89,6 +93,7 @@ namespace ShopifyMessages.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public RedirectToRouteResult Edit(EditViewModel viewModel)
         {
             if (viewModel.Id.StartsWith(Id.TemplatePrefix))
@@ -100,11 +105,11 @@ namespace ShopifyMessages.Web.Controllers
             RavenSession.Store(viewModel.Message);
             RavenSession.SaveChanges();
 
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
 
         public RedirectToRouteResult SyncNewTemplates()
-        {  
+        {
             var newTemplateFolder = new DirectoryInfo(Server.MapPath("~/MessageTemplates"));
             var folders = newTemplateFolder.GetDirectories().ToList().Select(d => d.Name);
             foreach (var folder in folders)

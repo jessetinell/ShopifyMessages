@@ -1,6 +1,18 @@
 ﻿@model ShopifyMessages.Web.ViewModels.CreateViewModel
 
-<h1>Choose a template</h1>
+@if (ViewBag.ShopName == "jesse-9")
+{
+    @Html.ActionLink("Synka nya mallar", "SyncNewTemplates")
+}
+
+@if (Model.First)
+{
+    <h1>Create your first message</h1>
+}
+else
+{
+    <h1>Choose a template</h1>
+}
 @foreach (var template in Model.Templates)
 {
     <div class="template">

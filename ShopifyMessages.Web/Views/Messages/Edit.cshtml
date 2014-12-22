@@ -1,46 +1,164 @@
-﻿@model ShopifyMessages.Web.ViewModels.EditViewModel
-
+﻿@using Raven.Client.Linq
+@model ShopifyMessages.Web.ViewModels.EditViewModel
+@{
+    ViewBag.ContainerWrapper = false;
+}
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-
-<div id="appen-message-wrapper">
-    <div id="template-preview" data-template="@Model.TemplateIdentifier" style="width:@(Model.Message.Width)px;height:@(Model.Message.Height)px;">
-        @Model.EditableTemplate
-    </div>
-</div>
-
-@using (Html.BeginForm("Edit", "Messages", FormMethod.Post))
-{
-    @Html.TextBoxFor(m => m.Message.Name)
-    @Html.CheckBoxFor(m => m.Message.IsLive)
-
-
-    for (int i = 0; i < Model.Message.PlaceholderValues.Count; i++)
-    {
-        var placeholder = Model.Message.PlaceholderValues[i];
-        @Html.HiddenFor(p => p.Message.PlaceholderValues[i].Content, new { id = "hidden-" + placeholder.Id })
-        @Html.HiddenFor(p => p.Message.PlaceholderValues[i].Id)
+<style>
+    #appen-message-wrapper {
+        width: 100%;
+        background-color: #F0F0F0;
+        padding: 9px;
+        margin-bottom: 17px;
     }
 
-    @Html.HiddenFor(e => e.Id)
-    @Html.HiddenFor(t => t.Message.TemplateId)
-    @Html.HiddenFor(m => m.Message.Id)
-    @Html.HiddenFor(m => m.Message.Height)
-    @Html.HiddenFor(m => m.Message.Width)
+        #appen-message-wrapper.modal-bg {
+            background-color: #4D4D4D;
+        }
+</style>
+<div id="appen-message-wrapper" class="@(Model.Message.UseModalBackground ? "modal-bg" : string.Empty)">
+    <div id="template-preview" data-template="@Model.TemplateIdentifier" style="width:@(Model.Message.MaxWidth)px;height:@(Model.Message.MinHeight)px;">
+        @Html.Raw(Model.EditableTemplate)
+    </div>
+</div>
+<div class="container">
+    @using (Html.BeginForm("Edit", "Messages", FormMethod.Post))
+    {
+        @Html.TextBoxFor(m => m.Message.Name)
+        <div class="row">
+            <label>Live:</label>
+            @Html.CheckBoxFor(m => m.Message.IsLive)
+        </div>
+        <div class="row">
+            <label>Use modal background:</label>
+            @Html.CheckBoxFor(m => m.Message.UseModalBackground)
+        </div>
 
-    @Html.AntiForgeryToken()
-    <input type="submit" value="Spara" class="btn btn-danger pull-right" />
-}
+        foreach (var editor in Model.Message.PlaceholderValues.Where(p=>p.Key.StartsWith("editor")))
+        {
+            @Html.TextBoxFor(p => p.Message.PlaceholderValues[editor.Key], new { id = "hidden-" + editor.Key })
+        }
+
+
+        @Html.HiddenFor(e => e.Id)
+        @Html.HiddenFor(t => t.Message.TemplateId)
+        @Html.HiddenFor(m => m.Message.Id)
+        @Html.HiddenFor(m => m.Message.MinHeight)
+        @Html.HiddenFor(m => m.Message.MaxWidth)
+
+        <label>Horizontal position:</label>
+        @Html.DropDownListFor(m => m.Message.Position.HorizontalAlign, new List<SelectListItem>{
+    new SelectListItem
+
+                                                                         {
+                                                                             Text = "Center",
+                                                                             Value = "center"
+                                                                         },
+new SelectListItem
+                                                                         {
+                                                                             Text = "Left",
+                                                                             Value = "left"
+                                                                         },
+new SelectListItem
+                                                                         {
+                                                                             Text = "Right",
+                                                                             Value = "right"
+                                                                         }})
+        <label>Vertical position:</label>
+        @Html.DropDownListFor(m => m.Message.Position.VerticalAlign, new List<SelectListItem>{
+    new SelectListItem
+
+                                                                         {
+                                                                             Text = "Center",
+                                                                             Value = "center"
+                                                                         },
+                                                                         new SelectListItem
+
+                                                                         {
+                                                                             Text = "Top",
+                                                                             Value = "top"
+                                                                         },
+new SelectListItem
+                                                                         {
+                                                                             Text = "Bottom",
+                                                                             Value = "bottom"
+                                                                         },})
+
+        <h1>Images</h1>
+
+        {
+            <div id="images">
+
+                @foreach (var image in Model.Message.PlaceholderValues.Where(p => p.Key.StartsWith("image")))
+                {
+                    @Html.TextBoxFor(m => m.Message.PlaceholderValues[image.Key])
+                }
+            </div>
+        }
+        @Html.AntiForgeryToken()
+
+
+        <h1>Display rules</h1>
+        <label>Click (0 = startpage)</label>
+        @Html.TextBoxFor(m => m.Message.DisplayRules.Clicks)
+        <label>Scroll position</label>
+        @Html.TextBoxFor(m => m.Message.DisplayRules.ScrollPosition)
+        <label>Seconds</label>
+        @Html.TextBoxFor(m => m.Message.DisplayRules.Seconds)
+
+        if (Model.Template.HasForm)
+        {
+            var formSettings = Model.Message.FormSettings;
+            <h1>Form</h1>
+            <label>Use form;</label>
+            @Html.CheckBoxFor(m => m.Message.FormSettings.UseForm)
+
+            for (var i = 0; i < formSettings.Inputs.Count; i++)
+            {
+                <div class="input">
+                    <label>@formSettings.Inputs[i].NiceNameInEditMode</label>
+                    @Html.TextBoxFor(m => m.Message.FormSettings.Inputs[i].Placeholder)
+                    @Html.CheckBoxFor(m => m.Message.FormSettings.Inputs[i].Active)
+
+                    @Html.HiddenFor(m => m.Message.FormSettings.Inputs[i].Name)
+                    @Html.HiddenFor(m => m.Message.FormSettings.Inputs[i].Type)
+                </div>
+            }
+        }
+
+        <h1>Advanced</h1>
+        <label>Custom css</label>
+        @Html.TextAreaFor(m => m.Message.CustomCss)
+        <input type="submit" value="Spara" class="btn btn-danger pull-right" />
+    }
+</div>
+@*<style>
+        #screen {
+            width: 384px;
+            height: 216px;
+            background: #717171;
+        }
+         #message-in-screen {
+             width: @(Model.Message.MaxWidth /5)px;
+             height: @(Model.Message.MinHeight/5)px;
+             background: #00A1A8;
+         }
+    </style>
+    <div id="screen">
+        <div id="message-in-screen"></div>
+    </div>*@
 
 <script src="~/Scripts/tinymce/tinymce.min.js"></script>
+
 <script>
 
 </script>
 <script>
     var Page = 'publish';
-</script> 
+</script>
 <style>
-    #template-preview{
-        border:1px solid #FCA4A4;
+    #template-preview {
+        border: 1px solid #FCA4A4;
         overflow: hidden;
         margin: 25px auto;
         font-family: 'Open Sans', sans-serif;

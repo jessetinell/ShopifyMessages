@@ -1,0 +1,45 @@
+﻿@model ShopifyMessages.Core.Models.Message
+
+<div id="appen-message-content" style="background-image:url(@Model.PlaceholderValues["image-body"])">
+    @Raw(Model.PlaceholderValues["editor-text"])
+    @Form()
+</div>
+
+@helper Form()
+{
+    if (Model.FormSettings.UseForm)
+    {
+        <form>
+            <div id="appen-form-fields">
+                @foreach (var input in Model.FormSettings.Inputs.Where(i => i.Active))
+                {
+                    <input type="@input.Type" name="@input.Name" placeholder="@input.Placeholder" />
+                }
+                <input type="hidden" name="messageId" value="@Model.Id" />
+                <input type="submit" value="@Model.FormSettings.SubmitButtonText" />
+            </div>
+            <div id="appen-form-submitted" style="display:none;">
+                @Raw(Model.PlaceholderValues["editor-formsubmitted"])
+            </div>
+        </form>
+    }
+}
+
+<style>
+    #appen-message-content {
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+        /* Min-requirements ? */
+        width: 96%;
+        margin: auto;
+        height: 100%;
+    }
+
+        #appen-message-content .note {
+            font-size: 13px;
+            color: red;
+        }
+</style>

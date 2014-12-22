@@ -1,13 +1,8 @@
 ﻿using System.Configuration;
-using System.Web;
-using ShopifyMessages.Core.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ShopifyMessages.Core
 {
@@ -26,48 +21,26 @@ namespace ShopifyMessages.Core
             }
         }
 
-        public static string ParseTemplate(string html, List<PlaceholderValue> placeholderValues)
+        public static T Clone<T>(T source)
         {
-            return Regex.Replace(html, "\\{{(.+)\\}}", m => GetMatch(m, placeholderValues));
-        }
-        private static string GetMatch(Match m, List<PlaceholderValue> placeholderValues)
-        {
-            if (m.Success)
+            if (!typeof(T).IsSerializable)
             {
-                string key = m.Result("$1");
-                var placeholder = placeholderValues.FirstOrDefault(p => p.Id == key);
-                if(placeholder != null)
-                    return placeholder.Content;
-                return string.Empty;
+                throw new ArgumentException("The type must be serializable.", "source");
             }
-            return string.Empty;
-        }
 
-        //public static string CompileTemplate(string html, List<PlaceholderValues> placeholderValues)
-        //{
-        //    foreach (var p in placeholderValues)
-        //    {
-        //        var placeholder = "{{" + p.Id + "}}";
-        //        html = html.Replace(placeholder, p.Content);
-        //    }
-        //    return html;
-        //}
-
-
-        public static IHtmlString CompileEditableTemplate(string html, List<PlaceholderValue> placeholderValues)
-        {
-            foreach (var p in placeholderValues)
+            if (ReferenceEquals(source, null))
             {
-                var placeholder = "{{" + p.Id + "}}";
-
-                var content = p.Content;
-                if (p.Id.StartsWith("editor"))
-                {
-                    content = string.Format("<div id=\"{0}\" class=\"editable\">{1}</div>", p.Id, p.Content);
-                }
-                html = html.Replace(placeholder, content);
+                return default(T);
             }
-            return new HtmlString(html);
+
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new MemoryStream();
+            using (stream)
+            {
+                formatter.Serialize(stream, source);
+                stream.Seek(0, SeekOrigin.Begin);
+                return (T)formatter.Deserialize(stream);
+            }
         }
     }
 }

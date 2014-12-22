@@ -1,5 +1,0 @@
-C:\Users\Jesse\Desktop\ShopifyMessages\ShopifyMessages.Models\bin\Debug\ShopifyMessages.Models.dll
-C:\Users\Jesse\Desktop\ShopifyMessages\ShopifyMessages.Models\bin\Debug\ShopifyMessages.Models.pdb
-C:\Users\Jesse\Desktop\ShopifyMessages\ShopifyMessages.Models\obj\Debug\ShopifyMessages.Models.csprojResolveAssemblyReference.cache
-C:\Users\Jesse\Desktop\ShopifyMessages\ShopifyMessages.Models\obj\Debug\ShopifyMessages.Models.dll
-C:\Users\Jesse\Desktop\ShopifyMessages\ShopifyMessages.Models\obj\Debug\ShopifyMessages.Models.pdb

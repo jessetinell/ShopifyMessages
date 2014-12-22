@@ -1,4 +1,3 @@
-C:\Repos\ShopifyMessages\ShopifyMessages.Web\obj\Debug\ShopifyMessages.Web.csprojResolveAssemblyReference.cache
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\ShopifyMessages.Web.dll.config
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\ShopifyMessages.Web.dll
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\ShopifyMessages.Web.pdb
@@ -46,7 +45,6 @@ C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\System.Web.Http.WebHost.xml
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\System.Web.Helpers.xml
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\System.Web.Mvc.xml
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\System.Web.Optimization.xml
-C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\System.Web.Razor.xml
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\System.Web.WebPages.xml
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\System.Web.WebPages.Deployment.xml
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\System.Web.WebPages.Razor.xml
@@ -66,5 +64,9 @@ C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\Microsoft.Owin.Security.OAuth.x
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\Microsoft.Owin.Security.Google.xml
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Repos\ShopifyMessages\ShopifyMessages.Web\obj\Debug\ShopifyMessages.Web.csprojResolveAssemblyReference.cache
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\obj\Debug\ShopifyMessages.Web.dll
 C:\Repos\ShopifyMessages\ShopifyMessages.Web\obj\Debug\ShopifyMessages.Web.pdb
+C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\RazorEngine.dll
+C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\RazorEngine.pdb
+C:\Repos\ShopifyMessages\ShopifyMessages.Web\bin\RazorEngine.xml

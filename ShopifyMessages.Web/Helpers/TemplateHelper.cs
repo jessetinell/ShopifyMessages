@@ -33,15 +33,20 @@ namespace ShopifyMessages.Web.Helpers
         public static void SaveTemplateToDb(IDocumentSession session, string folderName)
         {
             var settingsJson = Helper.FileAsString(string.Format("/MessageTemplates/{0}/settings.json", folderName));
-            var html = Helper.FileAsString(string.Format("/MessageTemplates/{0}/template.html", folderName));
+            var html = Helper.FileAsString(string.Format("/MessageTemplates/{0}/template.cshtml", folderName));
 
             var template = JsonConvert.DeserializeObject<Template>(settingsJson);
 
             template.Id = Id.Template(folderName);
             template.Html = CleanUp.MinifyHtml(html);
+            template.HasForm = html.Contains("</form>");
+            if (template.HasForm)
+                template.FormSettings = new FormSettings { UseForm = html.Contains("</form>") };
             session.Store(template);
             session.SaveChanges();
         }
+
+
 
     }
 }

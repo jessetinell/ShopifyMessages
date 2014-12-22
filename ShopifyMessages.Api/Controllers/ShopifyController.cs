@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using Raven.Imports.Newtonsoft.Json;
+using Raven.Imports.Newtonsoft.Json.Serialization;
 using ShopifyMessages.Api.Models;
 using ShopifyMessages.Core.Helpers;
 using ShopifyMessages.Core.Models;
@@ -18,7 +19,6 @@ using System.Collections.Specialized;
 
 namespace ShopifyMessages.Api.Controllers
 {
-    //[RoutePrefix("api/shopifys")]
     public class ShopifyController : RavenDbController
     {
         [HttpGet]
@@ -31,7 +31,10 @@ namespace ShopifyMessages.Api.Controllers
 
             var messageResponse = ResponseHelper.ToJsonResponse(messages, templates);
 
-            var messagesJson = JsonConvert.SerializeObject(messageResponse);
+            var messagesJson = JsonConvert.SerializeObject(messageResponse, Formatting.Indented, new JsonSerializerSettings
+                                                                                                {
+                                                                                                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                                                                                                });
             script = string.Format("var appenMessages={0};", messagesJson) + script;
             var response = new HttpResponseMessage
             {
@@ -43,7 +46,7 @@ namespace ShopifyMessages.Api.Controllers
 
         private static string GetScriptString()
         {
-            using (StreamReader sr = new StreamReader(System.AppDomain.CurrentDomain.BaseDirectory + "/Messages.js"))
+            using (var sr = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + "/Messages.js"))
             {
                 return sr.ReadToEnd();
             }
@@ -68,7 +71,7 @@ namespace ShopifyMessages.Api.Controllers
             {
                 Content = new StringContent(json),
                 StatusCode = HttpStatusCode.OK
-                
+
             };
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             return response;

@@ -1,5 +1,4 @@
-﻿using System.Web;
-using ShopifyMessages.Core.Models;
+﻿using ShopifyMessages.Core.Models;
 
 namespace ShopifyMessages.Web.ViewModels
 {
@@ -9,6 +8,8 @@ namespace ShopifyMessages.Web.ViewModels
         public Message Message { get; set; }
 
         public string TemplateIdentifier { get; set; }
-        public IHtmlString EditableTemplate { get; set; }
+        public string EditableTemplate { get; set; }
+
+        public Template Template { get; set; }
     }
 }

@@ -7,7 +7,9 @@
     @Styles.Render("~/Content/css")
     <link href="~/Content/appen.edit.css" rel="stylesheet"/>
     @Scripts.Render("~/bundles/modernizr")
-
+    @{
+        var containerWrapper = ViewBag.ContainerWrapper ?? true;
+    }
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -27,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="@(containerWrapper ? "container" : string.Empty)">
         @RenderBody()
         <hr />
         <footer>
@@ -41,7 +43,7 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
     <script src="~/Js/appen.publish.js"></script>
     <script src="~/Js/appen.main.js"></script>
     

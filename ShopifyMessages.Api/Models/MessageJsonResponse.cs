@@ -1,17 +1,19 @@
 ﻿using ShopifyMessages.Core;
 using ShopifyMessages.Core.Models;
-using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Web;
 
 namespace ShopifyMessages.Api.Models
 {
     public class MessageJsonResponse
     {
-        public string id { get; set; }
-        public string html { get; set; }
+        public string Id { get; set; }
+        public string Html { get; set; }
+        public int MaxWidth { get; set; }
+        public int MinHeight { get; set; }
+        public Position Position { get; set; }
+        public DisplayRules DisplayRules { get; set; }
+        public bool UseModalBackground { get; set; }
     }
     public class ResponseHelper
     {
@@ -24,15 +26,17 @@ namespace ShopifyMessages.Api.Models
                 if (template != null)
                 {
                     var placeholderValues = message.PlaceholderValues;
-                    placeholderValues.Add(new PlaceholderValue { Id = "messageId", Content = message.Id });
+                    placeholderValues.Add("messageId",message.Id);
 
                     list.Add(new MessageJsonResponse
                     {
-                        //url = ConfigurationManager.AppSettings["ApiUrl"] + "/api/shopify/html/" + message.Id,
-                        //height = message.Height,
-                        //width = message.Width,
-                        id = message.Id,
-                        html = Helper.ParseTemplate(template.Html, placeholderValues)
+                        MinHeight = message.MinHeight,
+                        MaxWidth = message.MaxWidth,
+                        Id = message.Id,
+                        Html = TemplateParser.Parse(message,template.Html),
+                        Position = message.Position,
+                        DisplayRules = message.DisplayRules,
+                        UseModalBackground = message.UseModalBackground
                     });
                 }
 

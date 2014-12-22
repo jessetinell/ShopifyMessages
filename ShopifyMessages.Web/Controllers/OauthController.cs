@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Dynamic;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using ShopifyAPIAdapterLibrary;
+using ShopifyMessages.Core;
+using ShopifyMessages.Core.Helpers;
 using ShopifyMessages.Web.Infrastructure;
+using ShopifyMessages.Web.Models;
 
 namespace ShopifyMessages.Web.Controllers
 {
-    public class OauthController : Controller
+    public class OauthController : BaseController
     {
         [HttpGet]
         public ActionResult ShopifyAuthCallback(string code, string shop, string error)
@@ -28,19 +32,45 @@ namespace ShopifyMessages.Web.Controllers
             if (authState != null && authState.AccessToken != null)
             {
                 ShopifyAuthorize.SetAuthorization(HttpContext, authState);
-                //var shopifyApi = new ShopifyAPIClient(authState);
-                //dynamic a = new ExpandoObject();
-                //a.script_tag = new ExpandoObject();
-                //a.script_tag.@event = "onload";
-                //a.script_tag.src = ConfigurationManager.AppSettings["ApiUrl"] + "/api/shopify/" + shopName;
-                //var json = JsonConvert.SerializeObject(a);
+                
+                var shopId = Id.Shop(shopName);
+                var shopInDb = RavenSession.Load<Shop>(shopId);
+                var shopifyApi = new ShopifyAPIClient(authState);
 
-                //if (!System.Diagnostics.Debugger.IsAttached)
-                //{
-                //    shopifyApi.Post("/admin/script_tags.json", json);
-                //}
+                if (shopInDb == null)
+                {
+                    RavenSession.Store(new Shop
+                                       {
+                                           Id = shopId,
+                                           Name = shopName
+                                       });
+                    RavenSession.SaveChanges();
+                }
+
+                var jsonResponse = shopifyApi.Get(string.Format("/admin/script_tags.json?src={0}", AppUrl.ShopScript(shopName))).ToString();
+
+                if (Globals.IsLive() && !jsonResponse.Contains("created_at"))
+                {
+                    dynamic scriptTag = new ExpandoObject();
+                    scriptTag.script_tag = new ExpandoObject();
+                    scriptTag.script_tag.@event = "onload";
+                    scriptTag.script_tag.src = "http://t.myvisitors.se/js/";//AppUrl.ShopScript(shopName);
+                    var scriptTagJson = JsonConvert.SerializeObject(scriptTag);
+
+                    try
+                    {
+                        var addScriptResponse = shopifyApi.Post("/admin/script_tags.json", scriptTagJson);
+                        if (!addScriptResponse.ToString().Contains("created_at"))
+                        {
+                            // LOGGER ERROR
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // LOGGER FATAL
+                    }
+                }
             }
-
             return RedirectToAction("Index", "Home");
         }
 
@@ -60,6 +90,5 @@ namespace ShopifyMessages.Web.Controllers
             var authUrl = authorizer.GetAuthorizationURL(new[] { ConfigurationManager.AppSettings["Shopify.Scope"] }, returnUrl.ToString());
             return Redirect(authUrl);
         }
-
     }
 }
